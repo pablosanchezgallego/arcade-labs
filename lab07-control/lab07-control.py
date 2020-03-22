@@ -1,5 +1,6 @@
 
 import arcade
+import random
 
 # --- Constants ---
 SCREEN_WIDTH = 1080
@@ -64,6 +65,16 @@ class MyGame(arcade.Window):
         self.enemigo2.dibujo_personaje()
         self.enemigo3.dibujo_personaje()
 
+
+    def movimiento_jugador(self, distancia):
+        self.jugador.position_x += distancia
+        self.camello.position_x += distancia
+
+    def movimiento_enemigo(self, distancia):
+        self.enemigo1.position_x += distancia
+        self.enemigo2.position_x += distancia
+        self.enemigo3.position_x += distancia
+
     def on_key_press(self, key, modifiers):
         if key == arcade.key.LEFT:
             print("Retrocedemoooooos!!!!")
@@ -73,6 +84,7 @@ class MyGame(arcade.Window):
             print("avanzamoooooss!!!!")
             self.jugador.position_x += 10
             self.camello.position_x += 10
+
 
 def main():
     window = MyGame()
