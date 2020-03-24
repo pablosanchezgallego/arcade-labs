@@ -5,6 +5,7 @@ import random
 # --- Constants ---
 SCREEN_WIDTH = 1080
 SCREEN_HEIGHT = 720
+MOVEMENT_SPEED = 5
 
 def dibujar_fondo():
     """ Draw the ground """
@@ -12,9 +13,30 @@ def dibujar_fondo():
 
 
 class Dibujos:
-    def __init__(self, position_x, position_y):
+    def __init__(self, position_x, position_y, change_x, change_y, radius):
         self.position_x = position_x
         self.position_y = position_y
+        self.change_x = change_x
+        self.change_y = change_y
+        self.radius = radius
+
+
+    def update(self):
+        # Move the ball
+        self.position_y += self.change_y
+        self.position_x += self.change_x
+        # See if the ball hit the edge of the screen. If so, change direction
+        if self.position_x < self.radius:
+            self.position_x = self.radius
+
+        if self.position_x > SCREEN_WIDTH - self.radius:
+            self.position_x = SCREEN_WIDTH - self.radius
+
+        if self.position_y < self.radius:
+            self.position_y = self.radius
+
+        if self.position_y > SCREEN_HEIGHT - self.radius:
+            self.position_y = SCREEN_HEIGHT - self.radius
 
     def dibujo_personaje(self):
         arcade.draw_rectangle_filled(self.position_x + 100, self.position_y, 4, 40, arcade.csscolor.BLACK)  # torso
@@ -50,11 +72,11 @@ class MyGame(arcade.Window):
 
         arcade.set_background_color(arcade.color.BLUE)
 
-        self.jugador = Dibujos(250, 270)
-        self.enemigo1 = Dibujos(-20, 280)
-        self.enemigo2 = Dibujos(0, 260)
-        self.enemigo3 = Dibujos(-50, 240)
-        self.camello = Dibujos(260, 290)
+        self.jugador = Dibujos(250, 270, 0, 0, 15)
+        self.enemigo1 = Dibujos(-20, 280, 0, 0, 15)
+        self.enemigo2 = Dibujos(0, 260, 0, 0, 15)
+        self.enemigo3 = Dibujos(-50, 240, 0, 0, 15)
+        self.camello = Dibujos(260, 290, 0, 0, 15)
 
     def on_draw(self):
         arcade.start_render()
@@ -65,6 +87,8 @@ class MyGame(arcade.Window):
         self.enemigo2.dibujo_personaje()
         self.enemigo3.dibujo_personaje()
 
+    def update(self, delta_time):
+        self.jugador.update()
 
     def movimiento_jugador(self, distancia):
         self.jugador.position_x += distancia
@@ -76,14 +100,22 @@ class MyGame(arcade.Window):
         self.enemigo3.position_x += distancia
 
     def on_key_press(self, key, modifiers):
+        """ Called whenever the user presses a key. """
         if key == arcade.key.LEFT:
-            print("Retrocedemoooooos!!!!")
-            self.jugador.position_x -= 10
-            self.camello.position_x -= 10
+            self.jugador.change_x = -MOVEMENT_SPEED
         elif key == arcade.key.RIGHT:
-            print("avanzamoooooss!!!!")
-            self.jugador.position_x += 10
-            self.camello.position_x += 10
+            self.jugador.change_x = MOVEMENT_SPEED
+        elif key == arcade.key.UP:
+            self.jugador.change_y = MOVEMENT_SPEED
+        elif key == arcade.key.DOWN:
+            self.jugador.change_y = -MOVEMENT_SPEED
+
+    def on_key_release(self, key, modifiers):
+        """ Called whenever a user releases a key. """
+        if key == arcade.key.LEFT or key == arcade.key.RIGHT:
+            self.jugador.change_x = 0
+        elif key == arcade.key.UP or key == arcade.key.DOWN:
+            self.jugador.change_y = 0
 
 
 def main():
