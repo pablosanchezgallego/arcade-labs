@@ -1,11 +1,10 @@
-
 import arcade
-import random
 
 # --- Constants ---
 SCREEN_WIDTH = 1080
 SCREEN_HEIGHT = 720
 MOVEMENT_SPEED = 5
+
 
 def dibujar_fondo():
     """ Draw the ground """
@@ -19,7 +18,6 @@ class Dibujos:
         self.change_x = change_x
         self.change_y = change_y
         self.radius = radius
-
 
     def update(self):
         # Move the ball
@@ -89,6 +87,7 @@ class MyGame(arcade.Window):
 
     def update(self, delta_time):
         self.jugador.update()
+        self.enemigo1.update()
 
     def movimiento_jugador(self, distancia):
         self.jugador.position_x += distancia
@@ -96,26 +95,38 @@ class MyGame(arcade.Window):
 
     def movimiento_enemigo(self, distancia):
         self.enemigo1.position_x += distancia
-        self.enemigo2.position_x += distancia
-        self.enemigo3.position_x += distancia
 
     def on_key_press(self, key, modifiers):
         """ Called whenever the user presses a key. """
-        if key == arcade.key.LEFT:
+        if arcade.key.LEFT == key:
             self.jugador.change_x = -MOVEMENT_SPEED
-        elif key == arcade.key.RIGHT:
+        if key == arcade.key.RIGHT:
             self.jugador.change_x = MOVEMENT_SPEED
-        elif key == arcade.key.UP:
+        if key == arcade.key.UP:
             self.jugador.change_y = MOVEMENT_SPEED
-        elif key == arcade.key.DOWN:
+        if key == arcade.key.DOWN:
             self.jugador.change_y = -MOVEMENT_SPEED
+
+        if key == arcade.key.A:
+            self.enemigo1.change_x = -MOVEMENT_SPEED
+        if key == arcade.key.D:
+            self.enemigo1.change_x = MOVEMENT_SPEED
+        if key == arcade.key.W:
+            self.enemigo1.change_y = MOVEMENT_SPEED
+        if key == arcade.key.S:
+            self.enemigo1.change_y = -MOVEMENT_SPEED
 
     def on_key_release(self, key, modifiers):
         """ Called whenever a user releases a key. """
         if key == arcade.key.LEFT or key == arcade.key.RIGHT:
             self.jugador.change_x = 0
-        elif key == arcade.key.UP or key == arcade.key.DOWN:
+        if key == arcade.key.UP or key == arcade.key.DOWN:
             self.jugador.change_y = 0
+
+        if key == arcade.key.A or key == arcade.key.D:
+            self.enemigo1.change_x = 0
+        if key == arcade.key.W or key == arcade.key.S:
+            self.enemigo1.change_y = 0
 
 
 def main():
