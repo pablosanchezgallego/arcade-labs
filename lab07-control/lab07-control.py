@@ -70,7 +70,7 @@ class MyGame(arcade.Window):
 
         arcade.set_background_color(arcade.color.BLUE)
 
-        self.jugador = Dibujos(250, 270, 0, 0, 15)
+        self.jugador = Dibujos(250, 270, 0, 0, -100)
         self.enemigo1 = Dibujos(-20, 280, 0, 0, 15)
         self.enemigo2 = Dibujos(0, 260, 0, 0, 15)
         self.enemigo3 = Dibujos(-50, 240, 0, 0, 15)
@@ -89,16 +89,9 @@ class MyGame(arcade.Window):
         self.jugador.update()
         self.enemigo1.update()
 
-    def movimiento_jugador(self, distancia):
-        self.jugador.position_x += distancia
-        self.camello.position_x += distancia
-
-    def movimiento_enemigo(self, distancia):
-        self.enemigo1.position_x += distancia
-
     def on_key_press(self, key, modifiers):
         """ Called whenever the user presses a key. """
-        if arcade.key.LEFT == key:
+        if key == arcade.key.LEFT:
             self.jugador.change_x = -MOVEMENT_SPEED
         if key == arcade.key.RIGHT:
             self.jugador.change_x = MOVEMENT_SPEED
